@@ -1,4 +1,4 @@
-package algorithm
+package one
 
 import (
 	"testing"
