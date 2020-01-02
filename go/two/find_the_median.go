@@ -2,11 +2,22 @@ package two
 
 import "fmt"
 
+/**
+ *
+ * 给定两个大小为 m 和 n 的有序数组 nums1 和 nums2。
+ * 请你找出这两个有序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))。
+ * 你可以假设 nums1 和 nums2 不会同时为空。
+ * 来源：力扣（LeetCode）
+ * 链接：https://leetcode-cn.com/problems/median-of-two-sorted-arrays
+ * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+ * 速度太慢了，还需要优化一下
+ */
+
 func FindMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	m := len(nums1)
 	n := len(nums2)
-	var left int = (m + n + 1) / 2
-	var right int = (m + n + 2) / 2
+	var left = (m + n + 1) / 2
+	var right = (m + n + 2) / 2
 	if left == right {
 		return float64(findK(nums1, 0, nums2, 0, left))
 	}
@@ -37,8 +48,8 @@ func findK(nums1 []int, i int, nums2 []int, j int, k int) int {
 	}
 
 	key := (k / 2) - 1
-	del1 := (k / 2)
-	del2 := (k / 2)
+	del1 := k / 2
+	del2 := k / 2
 	var mid1 int
 	var mid2 int
 	if i+key >= len(nums1) {
