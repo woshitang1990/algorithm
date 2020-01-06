@@ -8,20 +8,74 @@ package two
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/median-of-two-sorted-arrays
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
- * 速度太慢了，还需要优化一下
+ * 优化了一下，目前16ms，还是有点慢，还需要优化一下
  */
 
 func FindMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	m := len(nums1)
 	n := len(nums2)
-	var left = (m + n + 1) / 2
-	var right = (m + n + 2) / 2
-	if left == right {
-		return float64(findK(nums1, 0, nums2, 0, left, m, n))
+	if m > n {
+		temp := nums1
+		nums1 = nums2
+		nums2 = temp
+
+		tmp := m
+		m = n
+		n = tmp
 	}
 
-	return (float64(findK(nums1, 0, nums2, 0, left, m, n)) + float64(findK(nums1, 0, nums2, 0, right, m, n))) / 2
+	iMin := 0
+	iMax := m
+	halfLen := (m + n + 1) / 2
+	for {
+		if iMin <= iMax {
+			i := (iMin + iMax) / 2
+			j := halfLen - i
+			if i < iMax && nums2[j-1] > nums1[i] {
+				iMin = i + 1
+			} else if i > iMin && nums1[i-1] > nums2[j] {
+				iMax = i - 1
+			} else {
+				maxLeft := 0
+				if i == 0 {
+					maxLeft = nums2[j-1]
+				} else if j == 0 {
+					maxLeft = nums1[i-1]
+				} else {
+					if nums1[i-1] >= nums2[j-1] {
+						maxLeft = nums1[i-1]
+					} else {
+						maxLeft = nums2[j-1]
+					}
+				}
 
+				if (m+n)%2 == 1 {
+					return float64(maxLeft)
+				}
+
+				minRight := 0
+				if i == m {
+					minRight = nums2[j]
+				} else if j == n {
+					minRight = nums1[i]
+				} else {
+					if nums1[i] <= nums2[j] {
+						minRight = nums1[i]
+					} else {
+						minRight = nums2[j]
+					}
+				}
+
+				return float64(maxLeft+minRight) / 2
+
+			}
+		} else {
+			break
+		}
+
+	}
+
+	return float64(0)
 }
 
 func findK(nums1 []int, i int, nums2 []int, j int, k int, m, n int) int {
